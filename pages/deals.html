@@ -1,0 +1,31 @@
+<div class="col-md-12">
+<div ng-repeat="deal in deals"  class="deals">
+    
+    <div class="wide" >
+        <img ng-src="{{deal.File.path}}"/>
+    </div>
+	<div class="description">
+		<h3>{{deal.Deal.title}}</h3>
+		<span ng-bind-html="deal.Deal.description | limitTo : 455 | sanitize"></span>
+		<span ng-show="{{deal.Deal.description.length > 455}}"> (...) </span>
+		<div>R$ {{deal.Deal.full_price}}</div>
+		<div>R$ {{deal.Deal.discount_price}}</div> 
+		<div> {{ deal.Deal.percent | parseInt  }} %</div>
+	</div>
+    
+</div>
+</div>
+<style type="text/css">
+
+.deals {
+	margin-bottom:10px;
+}
+.wide {
+  width:100%;
+}
+
+.wide img {
+  min-width:100%; 
+  max-height: 250px;
+}
+</style>

@@ -1,0 +1,31 @@
+<blockquote>Buscar Por:
+</blockquote>
+<div class="input-group name">
+<input type="text" class="form-control"  placeholder="buscar por ... ex: pizza,buffet,rodizio"  ng-model="name">
+<span class="input-group-btn">
+    <button class="btn btn-default" type="button" ng-click="listByName()"><span class="glyphicon glyphicon-search"></span></button>
+</span>
+</div>
+
+<blockquote>
+Onde ?
+</blockquote>
+
+<div class="input-group locale">
+	<div class="input-group-btn search-panel">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-filter"> </span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#/list">Localização Atual</a></li>
+                      <li><a href="#/list">Lugares</a></li>
+                      <li><a href="#/list">Endereço</a></li>
+                    </ul>
+                </div>
+<input type="text" class="form-control"  placeholder=""  ng-model="name">
+<span class="input-group-btn">
+    <button class="btn btn-default" type="button" ng-click="listByName()"><span class="glyphicon glyphicon-map-marker"></span></button>
+</span>
+</div>
+<button class="btn btn-default btn-danger btn-block buscar"><span class="glyphicon glyphicon-cutlery"></span> buscar</button>
+

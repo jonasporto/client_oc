@@ -1,0 +1,58 @@
+.mask{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 15;
+    width: 100%;
+    height: 100%;/*
+    background: rgba(0, 0, 0, 0.8);*/
+}
+
+nav.menu{
+    position: fixed;
+    z-index: 20;
+    background-color:#A60800 !important; 
+    overflow: hidden;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+/*hide menu above body*/
+nav.slide-menu-bottom{
+    left: 0;
+    width: 100%;
+    height: 40px;
+    bottom: -100px
+}
+/*show menu*/
+body.smb-open nav.slide-menu-bottom{
+    bottom: -1px;
+ }
+
+.activate{
+    background:transparent;
+    border-bottom:3px solid #A60800;
+        
+}
+
+/* a wrapper for the paginatior */
+.btn-group-wrap {
+    text-align: center;
+}
+
+div.btn-group-nav {
+    padding-top: 5px;
+    margin: 0 auto; 
+    text-align: center;
+    width: inherit;
+    display: inline-block;
+}
+
+.btn-group-nav .btn {
+    float: left;   
+    color:#fff;
+    background:transparent;
+}

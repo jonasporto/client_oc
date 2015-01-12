@@ -1,0 +1,57 @@
+      <div class="tab-content">
+        
+          <div class="tab-pane" id="panel-1">
+            <div class="input-group">
+             <input type="text" class="form-control">
+                <span class="input-group-btn">
+              
+                  <button class="btn btn-default" type="button" onclick="getEstablishments()">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </button>
+                </span>
+                  
+        
+            </div>
+            
+    <div class="row">
+    <div class="col-md-6" ng-controller="listCtrl">
+        <div ng-repeat="rs in results" class="well well-sm">
+            <div class="row">
+                <div class="col-xs-3 col-md-3 text-center">
+                    <img src={{img()}} alt="bootsnipp" class="img-rounded img-responsive" />
+                </div>
+                <div class="col-xs-9 col-md-9 section-box">
+                    <h2>{{rs.Establishment.name || 'Nome não definido'}}</h2>
+                    <p>{{rs.Establishment.description || ''}}</p>
+                    <p>{{rs.Address[0].street_address}}</p>
+                    <p>{{rs.Address[0].city}} - {{rs.Address[0].state}}</p>
+                    <p>
+                        <span class="glyphicon glyphicon-earphone"></span> 
+                        <a href="tel:{{replace(rs.Telephone[0].telephone_number)}}">
+                             {{rs.Telephone[0].telephone_number}}
+                        </a>
+                    </p>
+                    <p>Distancia {{distance(rs.Address[0].Coordinate[0].lat,rs.Address[0].Coordinate[0].lng)}}</p>
+                    <hr />
+                    <div class="row rating-desc">
+                        <div class="col-md-12">
+                            <span ng-repeat="rate in rates">
+                                <span class="glyphicon glyphicon-heart"></span>
+                            </span>
+                            <span>(36)</span>
+                            <span class="separator">|</span>
+                            <span class="glyphicon glyphicon-comment"></span>
+                            (<span>100</span>Comments)
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+          
+            </div>
+          
+          </div>
+          

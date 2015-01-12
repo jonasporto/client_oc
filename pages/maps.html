@@ -1,0 +1,283 @@
+
+<script type="text/javascript">
+  var newmarker = [];
+  var coords_data = {};
+  var paths = [];
+  var page = 2;
+  var newcoords;
+
+  try{
+    var last_location = localStorage.getObj('last_location');
+  } catch(e) {
+    console.log('não tinhamos ultima posição:',e);
+  }
+  var coords = last_location || { k: -14.235004, B: -51.92527999999999 };
+
+  /* maps size 100% */
+  $('#map-canvas').width( $( 'body' ).width() )
+                  .height( $( 'body' ).height() );
+ 
+  var options = {
+      center: new google.maps.LatLng(coords.k,coords.B),
+      zoom: 4,
+      mapTypeControl: false,
+      overviewMapControl:false
+  };
+
+  var map = new google.maps.Map(document.getElementById('map-canvas'), options);
+  
+  var marker = new google.maps.Marker({
+      map: map,
+      draggable: true,
+      animation: google.maps.Animation.DROP,
+      icon : ROOTFOLDER + "img/icons/maps/target.png",
+      title: ''
+  });
+
+
+  /*google.maps.event.addListener(marker, 'drag', function(){
+     map.setCenter(marker.getPosition());
+  });*/
+
+  if (last_location) {
+    updateMarkerData(last_location);
+  }
+
+
+
+  results.forEach(function(data_establishment,i){
+     if (i == results.length - 1){
+        sortPoints2Polygon();
+     }
+    setEstablishmentsInTheMap(data_establishment);
+  });
+
+
+
+  google.maps.event.addListener(marker, 'dragend', function(){
+      updateMarkerData(marker.getPosition());
+  });
+
+  google.maps.event.addListener(map, 'click',function(data){
+    updateMarkerData(data.latLng);
+  });
+  google.maps.event.addListener(map, 'mouseup', function(event){
+   console.log(event);
+   newcoords = event;
+   console.log('circle',bounds.contains(event.latLng));
+   console.log('polyline:',google.maps.geometry.poly.containsLocation(event.latLng,polyline));
+
+   if(!google.maps.geometry.poly.containsLocation(event.latLng,polyline)){
+      getMoreResults();
+   }
+  // storeMarkerInTheMap();
+  });
+
+   google.maps.event.addListener(marker, 'click', function(data){
+      console.log(data);
+  });
+
+  function updateMarkerData(latLng){
+    
+     coords = latLng =  new google.maps.LatLng(latLng.k,latLng.B);     
+     
+
+     localStorage.setObj('last_location', latLng);
+
+     var geocoder = new google.maps.Geocoder();
+
+     marker.setVisible(false);
+     if ( !latLng ) {
+        return;
+     }
+
+      map.setZoom(16);
+      console.log(latLng);
+      map.setCenter(latLng);
+      marker.setPosition(latLng);
+      marker.setVisible(true);
+
+        circle = new google.maps.Circle({
+            map: map,
+            clickable: false,
+            // metres
+            radius: 5000,
+            fillColor: '#fff',
+            fillOpacity: .1,
+            strokeOpacity: .1,
+            strokeWeight: .1
+        });
+
+         circle.bindTo('center', marker, 'position');
+         bounds = circle.getBounds();
+     
+   geocoder.geocode( { latLng : latLng}, function(results, status) {
+  //    place_formatted_address.innerHTML = results[0].formatted_address;
+   });
+
+  }
+
+  function getNavigationPosition(){
+    navigator.geolocation.getCurrentPosition(function(GEO){
+     geolocation = { native : true , k : GEO.coords.latitude , B : GEO.coords.longitude };
+     updateMarkerData(geolocation);
+    });
+  }
+
+  function goToListPage(){
+    location.href = '/layout/#/list/geolocation/' + coords.k + '/' + coords.B;
+  }
+
+  function setEstablishmentsInTheMap(data_establishment){ 
+
+    coords_data.k = data_establishment.Address[0].Coordinate[0].lat;
+    coords_data.B = data_establishment.Address[0].Coordinate[0].lng;
+    
+    var latLng =  new google.maps.LatLng(coords_data.k,coords_data.B);
+
+    paths.push(latLng);
+   
+    cod_establishent = '';    
+    cod_establishent = data_establishment.Establishment.id;
+    newmarker[cod_establishent] = new google.maps.Marker({
+      map: map,
+      animation: google.maps.Animation.DROP,
+      icon : ROOTFOLDER + 'img/icons/maps/restaurant.png',
+      title: ''
+    });
+
+    if ( !latLng ) {
+      return;
+    }
+
+    newmarker[cod_establishent].setPosition(latLng);
+    newmarker[cod_establishent].setVisible(true);
+
+   // place_formatted_address.innerHTML = "<a href=\"javascript:google.maps.event.trigger(newmarker, 'click');\">"+data_establishment.Establishment.name+"</a>";
+     
+   
+    google.maps.event.addListener(newmarker[cod_establishent], 'click', function(data){
+      console.log(newmarker[data_establishment.Establishment.id]);
+       newmarker[data_establishment.Establishment.id].setAnimation(google.maps.Animation.BOUNCE);
+       
+       cod_establishment = data_establishment.Establishment.id
+       estab = data_establishment;
+       place_formatted_address.innerHTML = "<h4> <a onclick=\"centerMarker(estab)\" href=\"javascript:google.maps.event.trigger(newmarker[cod_establishment], 'click');\">"+data_establishment.Establishment.name + "</a> </h4>" + 
+       "<p>"+ 
+              data_establishment.Address[0].street_address + "-" + data_establishment.Address[0].neighborhood + "<br/>" 
+             + data_establishment.Address[0].city + "," + data_establishment.Address[0].state +  "<br/>" 
+             + "</p>";
+
+       setTimeout(function(){ newmarker[data_establishment.Establishment.id].setAnimation(null); }, 750);
+    });
+
+
+  }
+
+  function centerMarker(data_establishment){
+    coords_data.k = data_establishment.Address[0].Coordinate[0].lat;
+       coords_data.B = data_establishment.Address[0].Coordinate[0].lng;
+       var latLng =  new google.maps.LatLng(coords_data.k,coords_data.B);
+       map.setCenter(latLng);
+     
+  }
+
+
+function sortPoints2Polygon() {
+     // if (polyline) polyline.setMap(null);
+      points = [];
+      
+      //var bounds = new google.maps.LatLngBounds(); 
+      
+      newmarker.forEach(function(gmarkers){
+        points.push(gmarkers.getPosition());
+        //bounds.extend(gmarkers.getPosition());
+     
+      });
+
+      var center = marker.getPosition();
+      var bearing = [];
+      for (var i=0; i < points.length; i++) {
+        points[i].bearing = google.maps.geometry.spherical.computeHeading(center,points[i]);
+      }
+      points.sort(bearingsort);
+      polyline = new google.maps.Polygon({
+        map: map,
+        paths:points, 
+        fillColor:"#fff000",
+        strokeWidth:0, 
+        fillOpacity:0.00001, 
+        strokeColor:"#fff000",
+        strokeOpacity:0.00001
+      });
+}
+
+function bearingsort(a,b) {
+  return (a.bearing - b.bearing);
+}
+
+function getMoreResults(){
+
+            routeParams.latitude = newcoords.latLng.k;
+            routeParams.longitude = newcoords.latLng.B;
+            page = 0;
+  
+  url = ( SERVICE_URL + '/oc/api/listEstablishment/' + 
+            routeParams.type + '/' + 
+            routeParams.latitude + '/' + 
+            routeParams.longitude + '/page:' + ++page 
+        );
+        
+        $.getJSON( url ).done( function( data ){
+            
+            r_len = results.length ;
+            results = results.concat(data.results);
+        
+            results.forEach(function(data_establishment,i){
+               
+               if (i == results.length - 1){
+                  sortPoints2Polygon();
+               }
+              
+              if (i >= r_len - 1){
+                  setEstablishmentsInTheMap(data_establishment);
+              }
+
+            });
+
+         }).fail(function(){
+            alert('deu merda');
+            /*routeParams.latitude = newcoords.latLng.k;
+            routeParams.longitude = newcoords.latLng.B;
+            page = 0;
+
+            getMoreResults();*/
+
+         });
+
+}
+
+
+</script>
+
+<div id="map-canvas"></div> 
+
+<div class="footer-info results-on-map navbar-fixed-bottom">
+      <div class="container">
+          
+          <div class="address">
+                <p id="place_formatted_address" class="pull-left">
+                </p>
+          
+          <!--   <span class="btn" onclick="getNavigationPosition()"><img src="img/target.png"/> Perto de mim</span>
+
+           -->  
+
+           <div class="pull-right button-go-to-results">
+              <button class="btn btn-success btn-fab btn-raised mdi-action-done" onclick="goToListPage()"></button>
+          </div>
+          
+          </div>
+          
+      </div>
+    </div>

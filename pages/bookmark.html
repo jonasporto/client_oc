@@ -1,0 +1,47 @@
+<div class="view results " onLoad="scrollToElement()" ng-class="animateClass">
+
+  <div class="item-results animate-repeat at-repeat-flip-in-horizontal"  ng-repeat="rs in bookmark" >
+    
+    <div ng-click="select(rs)" class="media list"  id="{{rs.Establishment.id}}">
+      
+      <span class="pull-left">
+        <img  class="thumbs" src="http://lorempixel.com/250/140/abstract" alt="..." />
+      </span>
+
+
+
+      <span class="pull-right">
+        <span class="marker glyphicon glyphicon-map-marker"></span>
+        <span class="distance-text"> {{ distance( rs.Address[0].Coordinate[0].lat, rs.Address[0].Coordinate[0].lng ) }} </span>
+      </span>
+  
+      <div class="media-body">
+        
+        <h4 class="media-heading"> {{ rs.Establishment.name || 'Nome não definido' }} </h4>
+       <!--  <div class="stars" star-rating="{{rs.RateAverage}}"></div>
+        --> 
+        <small class="description"> {{ rs.Category[0].title || 'Restaurante' }} </small> <br/>
+        
+        <small class="description" ng-show="rs.Address[0].street_address != null"> 
+        
+          {{rs.Address[0].street_address}}  
+          <span ng-show="rs.Address[0].neighborhood != null"> - {{rs.Address[0].neighborhood}} </span> <br/>
+        </small>
+        
+        <small class="description"> {{rs.Address[0].city}} - {{rs.Address[0].state}} </small>
+      
+      </div>
+      
+      <div class="detalhes pull-right">
+        <span class="btn btn-flat btn-danger">Detalhes <i class="arrow mdi-av-play-arrow"></i></span>
+      </div>
+
+     </div>
+    <span class="btn btn-flat btn-danger" ng-click="removeBookmark(rs.Establishment.id)">Remover <i class="arrow mdi-av-play-arrow"></i></span>
+      
+  </div>
+
+    <div class="coffee_cup" ng-show="started_request"></div>
+
+
+  </div>

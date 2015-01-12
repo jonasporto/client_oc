@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html data-ng-app="ondecomerApp">
+<head>
+  <meta charset="utf-8">
+  <title>Onde comer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  <meta name="description" content="Encontre os melhores lugares para comer e bom apetite!">
+  <meta name="author" content="">
+
+	<link href="css/bootstrap.min.css" rel="stylesheet" />
+	<link href="css/animation.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+
+	<link href="css/bootstrap-google-material-design/ripples.min.css" rel="stylesheet">
+    <link href="css/bootstrap-google-material-design/material-wfont.min.css" rel="stylesheet">
+
+  	<link href="css/bootstrap-touch-carousel.css" rel="stylesheet" />
+	
+  <link rel="stylesheet" href="css/bigvideo/bigvideo.css">
+
+  <link rel="stylesheet" href="css/idangerous.swiper.css">
+
+	<link href="css/style.css" rel="stylesheet" />
+<script type="text/javascript"  src="cordova.js"></script>
+  
+<script type="text/javascript" src="js/PushNotification.js"></script>
+
+<style type="text/css">
+.swiper-wrapper {
+  width: 100%;
+  height: 100%;
+ }
+</style>
+</head>
+
+<body data-ng-controller="defaultController" id="body">
+
+	<div class="overlay"></div>
+	<nav class="header navbar navbar-fixed-top" role="navigation">
+      <div class="container">
+        
+        <div class="navbar-header">
+          	
+        <div class="pull-right header-right">
+
+ 				<i onclick="expandSearch()" class="mdi-action-search search"></i>
+        <input id="input-gm-autocomplete" placeholder=" " class="search" type="text" />
+ 				
+ 				
+ 				<i class="button-options mdi-navigation-more-vert " id="dropdownMenu1" data-toggle="dropdown"></i>
+ 				  
+ 				  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				    <li role="presentation">
+				    	<a onclick="location.href = ROOTPATH '#/maps/' +  
+            										routeParams.type + '/' + 
+										            routeParams.latitude + '/' + 
+										            routeParams.longitude" 
+
+						role="menuitem" tabindex="-1" >Mapa</a>
+					</li>
+				  </ul>
+
+
+ 			</div>
+         
+          <span class="navbar-brand menu-button mdi-navigation-menu open-or-close-menu">
+          
+
+	<!-- 		<i ng-show="hasHistory()"class="back-button fa  fa-angle-left" onclick="history.back(-1)"></i>
+	 -->	
+	</span>
+        </div>
+     </div>
+    </nav>
+    
+<nav class="menu-sidebar">
+
+	<ul>
+
+		<li ng-hide="!user.User"> 
+			<a href="#/profile"> <i class="mdi-color-default mdi-action-account-box"></i> Meu Perfil </a> 
+		</li>
+        
+        <li ng-show="!user.User"> 
+        	<a href="#/login"> <i class="mdi-color-default mdi-social-person"></i> Login</a> 
+        </li>
+        
+		<li> 
+        	<a href="#/address/getMyPosition"> <i class="mdi-color-default mdi-maps-my-location"></i> Perto de mim </a> 
+        </li>
+		
+		<li> 
+        	<a href="#/checkin"> <i class="mdi-color-default mdi-maps-pin-drop"></i> Fazer Check-in </a> 
+        </li>
+        
+        <li> 
+        	<a href="#/address/lastPosition"> <i class="mdi-color-default mdi-maps-directions"></i> Alterar localização </a> 
+        </li>
+		<li> 
+      <a href="#/deals"> <i class="mdi-color-default mdi-action-loyalty"></i> Ofertas </a> 
+    </li>
+
+		<li> 
+			<a href="#/bookmark"> <i class="mdi-color-default mdi-action-bookmark"></i> Favoritos </a> 
+		</li>
+				
+		<li> 
+			<a href="#/sobre"> <i class="mdi-color-default mdi-action-today"></i> Sobre</a> 
+		</li>
+
+		<li ng-hide="!user.User"> 
+       		<a href="#/" ng-click="logoutUser()"><i class="mdi-color-default mdi-action-exit-to-app"></i> Sair</a> 
+	  </li>    
+
+	</ul>
+
+</nav>
+<!-- Angular ng-view -->
+ 
+<div class="container">
+	<!-- <button class="nav-toggler toggle-slide-bottom">Slide Menu Bottom</button><br>
+    -->
+  
+	<div class="row clearfix content">
+		<div class="col-md-16 column">
+
+       		<div class="view swiper-container" data-ng-view ng-class="animationStyle"></div>
+		</div>
+	</div>
+
+</div>
+
+<!-- End Angular ng-view -->
+
+
+
+
+
+
+<!-- begin Toast messages -->
+<div class='toast' style="display:none;"></div>
+<!-- End Toast messages -->
+
+<!-- helper right footer (to implement) -->     
+<!--     
+<span class="navbar-fixed-bottom pull-right">
+<i class="my-icon"><i></i></i>
+</span>
+ -->
+ <!-- /helper right footer -->
+
+
+<!-- Begin Modal preview photos -->
+
+<input style="float:right; margin-top:-1000px; z-index:-999;" placeholder="Escolha um imagem" class="upload fa fa-camera-retro" id="take-picture" accept="image/*" type="file" name="file[]" multiple>
+  
+<div class="modal fade" id="preview" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+      
+      </div>
+      <div class="preview modal-body col-md-12">
+      <img src="http://placehold.it/1x1&text=uma imagem" class="img-responsive img-rounded" alt="" id="show-picture">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
+        <button type="button" ng-click="upload()" class="btn btn-primary upload-image">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- End Modal preview photos -->
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+ <script src="js/idangerous.swiper-2.0.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&amp;libraries=places,geometry&amp;language=pt-br"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-route.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-animate.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/scripts.js"></script>
+<script src="js/bootstrap-touch-carousel.js"></script>
+<script src="js/angular/app.js"></script>
+
+ <script src="js/bigvideo/video.js"></script>
+ <script src="js/bigvideo/bigvideo.js"></script>
+
+ <script src="js/bootstrap-google-material-design/ripples.min.js"></script>
+ <script src="js/bootstrap-google-material-design/material.min.js"></script>
+ <script src="http://hammerjs.github.io/dist/hammer.min.js"></script>
+  
+ 
+<script>    
+            var ROOTPATH = location.pathname,
+              ROOTFOLDER = ROOTPATH.replace(/\w+\.html/,''),
+             SERVICE_URL = 'http://192.168.1.101';
+
+
+            $(document).ready(function() {
+                $.material.init();
+            });
+
+
+
+// Setup push notifications:
+try
+{
+    var pushNotification = window.plugins.pushNotification;
+    if (window.device.platform == 'android' || device.platform == 'Android') {
+        // Register for Android:
+        pushNotification.register(
+            pushSuccessHandler,
+            pushErrorHandler, {
+                "senderID":"579681744369", // Project number from Google Developer Console
+                "ecb":"onNotificationGCM"
+            }
+        );
+    }
+}
+catch(err)
+{
+    // For this example, we'll fail silently ...
+    console.log(err);
+}
+ 
+/**
+* Success handler for when connected to push server
+* @param result
+*/
+var pushSuccessHandler = function(result)
+{
+    console.log(result);
+};
+ 
+/**
+* Error handler for when not connected to push server
+* @param error
+*/
+var pushErrorHandler = function(error)
+{
+    console.log(error);
+};
+ 
+/**
+* Notification from Android GCM
+* @param e
+*/
+var onNotificationGCM = function(e)
+{
+    // Check which event:
+    switch(e.event)
+    {
+        case 'registered' :
+        {
+            console.log('android reg id: ' + e.regid);
+            break;
+        }
+    }
+};
+
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+    console.log('logando budega',device.cordova);
+}
+
+function initswiper() {
+  console.log('initswiper');
+
+  mySwiper = new Swiper('.swiper-container',{
+    
+    onSlideChangeStart: function(){
+      updateTabs();
+    }
+  
+  });  
+
+  // find all tabs
+  act_tabs = document.querySelectorAll('.tab');
+  
+  var i = 0;
+
+  for (; i < act_tabs.length; i++) {
+    
+    // stores indexes to all tabs 
+    act_tabs[i].setAttribute('index',i);
+
+    //target it click events
+    act_tabs[i].addEventListener('click',function(){
+      // if clicked swipe to ? (get my attribute index)
+      mySwiper.swipeTo(this.getAttribute('index'));
+    
+    },false);
+  }
+
+}
+
+
+
+function updateTabs(){
+  
+  var i = 0;
+  
+  //find and remove active tabs
+  for (; i < act_tabs.length; i++) {
+    act_tabs[i].className = act_tabs[i].className.replace(' active','');
+  }
+
+  // set a new active tab
+  var current_tab = document.querySelectorAll('.tab')[mySwiper.activeIndex].className += ' active';
+
+}
+
+</script>
+  
+</body>
+</html>

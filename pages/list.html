@@ -1,0 +1,141 @@
+<style type="text/css">
+
+body {background: #EAEAEA;}
+
+.user-details {position: relative; padding: 0;}
+.user-details .user-image {position: relative;  z-index: 1; width: 100%; text-align: center;}
+.user-image img { clear: both; margin: auto; position: relative;}
+
+.user-details .user-info-block {width: 100%; position: absolute; top: 55px; background: rgb(255, 255, 255); z-index: 0; padding-top: 35px;}
+.user-info-block .user-heading {width: 100%; text-align: center; margin: 10px 0 0;}
+.user-info-block .navigation {float: left; width: 100%; margin: 0; padding: 0; list-style: none; border-bottom: 1px solid #428BCA; border-top: 1px solid #428BCA;}
+
+.navigation li {float: left; margin: 0; padding: 0;}
+.navigation li a {padding: 20px 30px; float: left;}
+.navigation li.active a {background: #428BCA; color: #fff;}
+
+.user-info-block .user-body {float: left; padding: 5%; width: 90%;}
+.user-body .tab-content > div {float: left; width: 100%;}
+.user-body .tab-content h4 {width: 100%; margin: 10px 0; color: #333;}
+
+</style>
+<!--             <div class="input-group">
+                <div class="input-group-btn search-panel">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-filter"> </span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#/list" ng-click={{type = 'name'}}>Nome</a></li>
+                      <li><a href="#/list" ng-click={{type = 'fulltext'}}>Endereço</a></li>
+                    </ul>
+                </div>
+                <input type="hidden" name="search_param" value="all" id="search_param">         
+                <input type="text" class="form-control"  placeholder=""  ng-model="name">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" ng-click="listByName()"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+            </div>
+ -->
+           
+            
+    <div class="row">
+    <div class="col-md-6">
+        <div ng-repeat="rs in results" class="well well-sm">
+            <div class="row" ng-click="select(rs.Establishment.id) ">
+                <div class="col-xs-3 col-md-3 text-center">
+                   
+                </div>
+                <div class="col-xs-9 col-md-9 section-box">
+                    <h2>{{rs.Establishment.name || 'Nome não definido'}}</h2>
+                    <p>{{rs.Establishment.description || ''}}</p>
+                    <p>{{rs.Address[0].street_address}}</p>
+                    <p>{{rs.Address[0].city}} - {{rs.Address[0].state}}</p>
+                    <p>
+                        <span class="glyphicon glyphicon-earphone"></span> 
+                        <a href="tel:{{replace(rs.Telephone[0].telephone_number)}}">
+                             {{rs.Telephone[0].telephone_number}}
+                        </a>
+                    </p>
+                    <p>Distancia {{distance(rs.Address[0].Coordinate[0].lat,rs.Address[0].Coordinate[0].lng)}}</p>
+                    <hr />
+                    <div class="row rating-desc">
+                        <div class="col-md-12">
+                            <span ng-repeat="rate in rates">
+                                <span class="glyphicon glyphicon-heart"></span>
+                            </span>
+                            <span>(36)</span>
+                            <span class="separator">|</span>
+                            <span class="glyphicon glyphicon-comment"></span>
+                            (<span>100</span>Comments)
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+          
+           
+                   
+  <div id="details-establishments" >
+<div class="container" >
+  <div class="row">
+    <div class="col-sm-4 col-md-4 user-details" ng-show="details">
+            <div class="user-image">
+                <img src="http://0adb8101b7ae4114a392-dfaacb9b5d3eae26a1de1132d02b2b65.r33.cf3.rackcdn.com/fast-food-100128934.jpg"  title="Jonas Porto" class="img-circle">
+             </div>
+            <div class="user-info-block">
+                <div class="user-heading">
+                    <h3 class="Header">{{details.Establishment.name}}</h3>
+                    <span class="help-block"> {{details.Address[0].city}} , {{details.Address[0].state}}</span>
+                    <a class="back">voltar</a>
+                </div>
+                <ul class="navigation">
+                    
+                    <li ng-click="change('feed')" class="active">
+                        <a data-toggle="tab">
+                            <span class="glyphicon glyphicon-th"></span>
+                        </a>
+                    </li>
+                    <li ng-click="change('maps')">
+                        <a data-toggle="tab">
+                            <span class="glyphicon glyphicon-map-marker"></span>
+                        </a>
+                    </li>
+                    <li ng-click="change('comments')">
+                        <a data-toggle="tab">
+                            <span class="glyphicon glyphicon-comment"></span>
+                        </a>
+                    </li>
+                    
+                    <li ng-click="change('phones')">
+                        <a data-toggle="tab">
+                            <span class="glyphicon glyphicon-earphone"></span>
+                        </a>
+                    </li>
+                      
+                </ul>
+                <div class="user-body">
+                    <div ng-switch on="tab" class="tab-content">
+                        <div id="information" ng-switch-when="feed">
+                            <h4>feed</h4>
+                        </div>
+                        <div id="settings" ng-switch-when="maps">
+                            <h4>maps</h4>
+                        </div>
+                        <div id="email" ng-switch-when="comments">
+                            <h4>Comments</h4>
+                        </div>
+                        <div id="events" ng-switch-when="phones">
+                            <h4>Phones</h4>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+</div>
+
+

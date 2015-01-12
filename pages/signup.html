@@ -1,0 +1,57 @@
+<script type="text/javascript">
+ (function(){
+  var input = document.getElementById('input-gm-autocomplete');
+  input.style.display = 'none';
+})();
+
+    $(function(){
+
+        $('.unlock-pass').on('click',function(e){
+        
+            if ( e.type == 'click' ) {
+               return document.getElementsByClassName('password')[0].type = 'text';
+            }
+         
+            return document.getElementsByClassName('password')[0].type = 'password';
+        });
+
+    });
+
+</script>
+<div class="container" style="margin-top:20px !important;">
+
+            <h3 class="text-muted">Criar uma nova conta</h3>
+            
+            <hr/>            
+            
+            <input class="form-control username input-margin" placeholder="Username" type="text" ng-model="username">
+
+            <small class="text-muted">http://ondecomer.club/u/{{username}}</small>            
+
+            <input class="form-control email input-margin" placeholder="Email" type="text">
+            
+            <div class="form-group">
+                <div class="input-group">
+                    <input class="form-control password" placeholder="Senha" type="password"/>
+                    
+                    <span class="input-group-addon">
+                        <span class="fa fa-eye unlock-pass"></span>
+                    </span>
+                </div>
+            </div>
+          
+          <hr/>
+
+          
+            <button onclick="addUserAndAuthenticate()" class="btn btn-lg btn-primary btn-block btn-center">Continuar</button>
+            <br>
+            
+
+            <small class="login text-muted">Já possui uma conta? 
+                <a class="btn btn-sm btn-default" 
+                        href="#/login"> 
+                        Entrar 
+                </a> 
+            </small>
+
+</div>
